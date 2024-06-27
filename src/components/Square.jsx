@@ -1,50 +1,43 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
-function Square() {
+function Square({position, color, axis,name, setInputResult}) {
   const [direccion, setDireccion] = useState('');
   const startPos = useRef({ x: 0, y: 0 });
 
   const determinarDireccion = (event, info) => {
-    const threshold = 50; // Umbral para considerar un movimiento significativo
+    console.log(info.offset.x, info.offset.y)
+
+    const threshold = 30; // Umbral para considerar un movimiento significativo
     const xDiff = info.offset.x - startPos.current.x;
     const yDiff = info.offset.y - startPos.current.y;
 
-
+    // console.log(xDiff, yDiff)
     if (Math.abs(xDiff) > Math.abs(yDiff)) {
       // Movimiento horizontal
       if (Math.abs(xDiff) > threshold) {
-        setDireccion(xDiff > 0 ? 'derecha' : 'izquierda');
+        setInputResult(xDiff > 0 ? 'derecha' : 'izquierda');
       }
     } else {
       // Movimiento vertical
       if (Math.abs(yDiff) > threshold) {
-        setDireccion(yDiff > 0 ? 'abajo' : 'arriba');
+        setInputResult(yDiff > 0 ? 'abajo' : 'arriba');
       }
     }
-  };
+  };    
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-      <motion.div
-        drag
+    <div className={`flex flex-col justify-center items-center ${position==10 && 'col-start-2'}`}>
+      <motion.div className={`w-10 h-10 ${color} rounded-lg flex items-center justify-center`}
+        drag={axis}
         dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-        dragElastic={1}
-        style={{
-          width: '50px',
-          height: '50px',
-          backgroundColor: '#646cff',
-          borderRadius: '10px',
-          cursor: 'grab'
-        }}
-        onDragStart={(event, info) => {
-          startPos.current = info.offset;
-          console.log(info)
-        }}
+        dragElastic={0.35}
         onDrag={determinarDireccion}
+        // onDragEnd={() => setInputResult('reposo')}
       >
+        {name}
       </motion.div>
-      <p>Dirección: {direccion}</p>
+      {/* <p>Dirección: {direccion}</p> */}
     </div>
   );
 }
