@@ -1,11 +1,10 @@
-import Face from './components/Face'
-import Square from './components/Square'
+import SelectPage from './pages/SelectPage'
 
 function App() {
 
   return (
     <>
-      <Face />
+      <SelectPage />
     </>
   )
 }
